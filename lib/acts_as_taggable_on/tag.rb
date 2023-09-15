@@ -64,6 +64,10 @@ module ActsAsTaggableOn
         .select("DISTINCT #{ActsAsTaggableOn.tags_table}.*")
     end
 
+    def self.for_account(account_id)
+      where(account_id: account_id)
+    end
+
     ### CLASS METHODS:
 
     def self.find_or_create_with_like_by_name(name)
