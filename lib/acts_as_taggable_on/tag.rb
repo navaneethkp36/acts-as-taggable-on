@@ -16,7 +16,7 @@ module ActsAsTaggableOn
 
     # monkey patch this method if don't need name uniqueness validation
     def validates_name_uniqueness?
-      true
+      false
     end
 
     ### SCOPES:
