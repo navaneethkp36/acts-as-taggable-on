@@ -59,9 +59,10 @@ module ActsAsTaggableOn
     end
 
     def self.for_tenant(tenant)
-      joins(:taggings)
-        .where("#{ActsAsTaggableOn.taggings_table}.tenant = ?", tenant.to_s)
-        .select("DISTINCT #{ActsAsTaggableOn.tags_table}.*")
+      # joins(:taggings)
+      #   .where("#{ActsAsTaggableOn.taggings_table}.tenant = ?", tenant.to_s)
+      #   .select("DISTINCT #{ActsAsTaggableOn.tags_table}.*")
+      where(tenant_id: tenant).select('*')
     end
 
     ### CLASS METHODS:
