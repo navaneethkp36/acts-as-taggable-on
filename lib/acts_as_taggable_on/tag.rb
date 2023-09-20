@@ -16,7 +16,7 @@ module ActsAsTaggableOn
 
     # monkey patch this method if don't need name uniqueness validation
     def validates_name_uniqueness?
-      false
+      true
     end
 
     ### SCOPES:
@@ -59,10 +59,13 @@ module ActsAsTaggableOn
     end
 
     def self.for_tenant(tenant)
-      # joins(:taggings)
-      #   .where("#{ActsAsTaggableOn.taggings_table}.tenant = ?", tenant.to_s)
-      #   .select("DISTINCT #{ActsAsTaggableOn.tags_table}.*")
-      where(tenant: tenant).select('*')
+      if ActsAsTaggableOn.tenant_table == :taggings
+        joins(:taggings)
+          .where("#{ActsAsTaggableOn.taggings_table}.tenant = ?", tenant.to_s)
+          .select("DISTINCT #{ActsAsTaggableOn.tags_table}.*")
+      elsif ActsAsTaggableOn.tenant_table == :tags
+        where(tenant: tenant).select('*')
+      end
     end
 
     ### CLASS METHODS:

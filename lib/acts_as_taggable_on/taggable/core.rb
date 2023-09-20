@@ -282,12 +282,16 @@ module ActsAsTaggableOn
 
           # Create new taggings:
           new_tags.each do |tag|
-            tag.update(tenant: taggable_tenant) if taggable_tenant
-            # if taggable_tenant
-            #   taggings.create!(tag_id: tag.id, context: context.to_s, taggable: self, tenant: taggable_tenant)
-            # else
+            if ActsAsTaggableOn.tenant_table == :taggings
+              if taggable_tenant
+                taggings.create!(tag_id: tag.id, context: context.to_s, taggable: self, tenant: taggable_tenant)
+              else
+                taggings.create!(tag_id: tag.id, context: context.to_s, taggable: self)
+              end
+            elsif ActsAsTaggableOn.tenant_table == :tags
+              tag.update(tenant: taggable_tenant) if taggable_tenant
               taggings.create!(tag_id: tag.id, context: context.to_s, taggable: self)
-            # end
+            end
           end
         end
 
