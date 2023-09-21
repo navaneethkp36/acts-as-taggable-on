@@ -36,7 +36,7 @@ module ActsAsTaggableOn
         sanitize_sql_for_named_any(tag).force_encoding('BINARY')
       end.join(' OR ')
       if tenant
-        where(tenant: tenant)
+        where(clause).where(tenant: tenant)
       else
         where(clause)
       end
