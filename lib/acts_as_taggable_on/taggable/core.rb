@@ -236,7 +236,7 @@ module ActsAsTaggableOn
       ##
       # Find existing tags or create non-existing tags
       def load_tags(tag_list)
-        ActsAsTaggableOn::Tag.find_or_create_all_with_like_by_name(tag_list)
+        ActsAsTaggableOn::Tag.find_or_create_all_with_like_by_name(tag_list, taggable_tenant)
       end
 
       def save_tags

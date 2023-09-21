@@ -31,11 +31,15 @@ module ActsAsTaggableOn
       end
     end
 
-    def self.named_any(list)
+    def self.named_any(list, tenant = nil)
       clause = list.map do |tag|
         sanitize_sql_for_named_any(tag).force_encoding('BINARY')
       end.join(' OR ')
-      where(clause)
+      if tenant
+        where(tenant: tenant)
+      else
+        where(clause)
+      end
     end
 
     def self.named_like(name)
@@ -78,12 +82,12 @@ module ActsAsTaggableOn
       end
     end
 
-    def self.find_or_create_all_with_like_by_name(*list)
+    def self.find_or_create_all_with_like_by_name(list ,tenant = nil)
       list = Array(list).flatten
 
       return [] if list.empty?
 
-      existing_tags = named_any(list)
+      existing_tags = named_any(list, tenant)
       list.map do |tag_name|
         tries ||= 3
         comparable_tag_name = comparable_name(tag_name)
